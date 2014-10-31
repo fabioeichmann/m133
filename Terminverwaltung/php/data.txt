@@ -1,0 +1,6 @@
+#:user:date:desription:important:location:finished
+1:fabio:20.10.14:test:N:Abtwil
+3:simi:20.10.14:test:N:Abtwil
+5:marco:20.10.14:test:N:Abtwil
+6:jan:20.10.14:test:N:Abtwil
+7:jan:20.10.14:test:N:Abtwil
