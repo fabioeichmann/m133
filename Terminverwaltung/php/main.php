@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "finished.php";
+include "functions.php";
 if(!isset($_SESSION['username']))
 {
     echo "<p style='padding-left: 45%'>Bitte zuerst <a href='login.php'>einloggen</a> ";

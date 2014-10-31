@@ -26,4 +26,17 @@ function finished()
     fclose($fp);
 
 }
+
+function get_ID(){
+    $data = file("data.txt");
+    $id = 1;
+    foreach ($data as $aufgabe) {
+        $arr_aufgabe = explode(":", $aufgabe);
+        if($id < $arr_aufgabe[0]){
+            $id = $arr_aufgabe[0];
+        }
+    }
+
+return $id+1;
+}
 ?>
