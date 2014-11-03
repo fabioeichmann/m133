@@ -19,6 +19,9 @@ if(isset($_POST['logout'])) {
 if(isset($_POST['save'])){
     finished();
 }
+if(isset($_POST['add'])){
+    header("Location: add_user.php");
+}
 ?>
 
 
@@ -78,7 +81,7 @@ if(isset($_POST['save'])){
 
                echo "</table>
                 <input type='image' src='../icons/save_task.png' name='save' value='Save'>
-
+                <input type='image' src='../icons/add.png' name='add' value='add'>
                 </form>";
 
 
@@ -86,11 +89,6 @@ if(isset($_POST['save'])){
 
                 ?>
 
-
-            <form method="post" action="add_task.php">
-
-                <input type="image" src="../icons/add.png" />
-            </form>
 
         </div>
 

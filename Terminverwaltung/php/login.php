@@ -5,17 +5,20 @@ session_start();
 if(isset($_POST['username'])) {
     $_SESSION['username'] = $_POST['username'];
 }
-
+if(isset($_POST['password'])){
+    $_SESSION['password'] = md5($_POST['password']);
+}
 ?>
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" media="screen" href="../css/index.css">
 <head>
     <title>Login</title>
 </head>
-<body style="padding-left: 40%; padding-top: 10%">
-<h1>Aufgabenverwaltung - LOGIN</h1>
+<body class="page">
+<h1 style="text-align: center;">Aufgabenverwaltung - LOGIN</h1>
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
     <table border="0" width="200" cellspacing="5">
@@ -25,7 +28,7 @@ if(isset($_POST['username'])) {
         </tr>
         <tr>
             <td>Passwort:</td>
-            <td><input type="password" name="password" />
+            <td><input type="password" name="password">
         </tr>
         <tr>
             <td>&nbsp;</td>

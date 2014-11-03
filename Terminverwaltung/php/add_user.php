@@ -46,7 +46,7 @@ if(isset($_POST['name'])){
     <link rel="stylesheet" media="screen" href="../css/index.css">
     <body class="page" >
 
-    <form method="post" action="user.php" >
+    <form method="post" action="user.php?var=add" >
         <table border="0" cellspacing="1" cellpadding="5">
             <tr>
                 <td>

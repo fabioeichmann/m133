@@ -18,13 +18,36 @@ if(isset($_POST['logout'])) {
 
     if (isset($_POST['edit'])) {
         $userdata = file("logindata.txt");
+        $i = 0;
+        $arr = "";
         foreach($userdata as $datauser){
             $arr_userdata = explode(":",$datauser);
-            if($_POST[$arr_userdata[1]] == 1){
-                $arr[] =
+            if(isset($arr_userdata)) {
+                if (isset($_POST[$arr_userdata[0]])) {
+                    if ($_POST[$arr_userdata[0]] == 1) {
+                        if ($i == 1) {
+                            $arr = $arr . $arr_userdata[0];
+                        } else {
+                            $arr = $arr . $arr_userdata[0] . ",";
+                        }
+                    }
+
+                }
+            }else
+            {
+                echo "tst";
             }
+            $i = $i + 1;
         }
-        header("Location: edit_user.php?var=".$_POST['admin']);
+        if(substr_count($arr,",") == 0){
+            header("Location: edit_user.php?var=".$arr);
+        }else{
+
+            echo "<script type='text/javascript'>";
+            echo " alert('Es kann nur ein User editiert werden');";
+            echo "</script>";
+
+        }
 
     }elseif(isset($_POST['add'])){
         header("Location: add_user.php");
@@ -33,18 +56,49 @@ if(isset($_POST['logout'])) {
 
 if(isset($_POST['password']) and isset($_POST['repeatpassword'])){
     if(trim($_POST['password']) != trim($_POST['repeatpassword'])){
-        echo "<meta http-equiv='refresh' content='1; URL=add_user.php'>";
+        if($_GET['var'] == 'add'){
+            echo "<meta http-equiv='refresh' content='1; URL=add_user.php'>";
             exit;
+        }/*elseif($_GET['var'] == 'edit'){
+            echo "<meta http-equiv='refresh' content='1; URL=edit_user.php?var=".$arr."'>";
+            exit;
+        }*/
     }elseif(isset($_POST['adduser'])){
 
         $fp = fopen("logindata.txt", "a+");
         fwrite($fp,PHP_EOL.$_POST['username'].":".md5($_POST['password']).":".$_POST['forename'].":".$_POST['name']);
         fclose($fp);
         unset($_POST['password']);
+        unset($_POST['repeatpassword']);
         unset($_POST['forename']);
         unset($_POST['username']);
         unset($_POST['name']);
     }
+    /*else{
+        $daten = file('logindata.txt');        // Datei einlesen
+        $fp = fopen('logindata.txt', 'w');            // Datei neu erstellen
+        foreach ($daten as $zeile){
+            $felder = explode(':', $zeile);        // Zeile aufteilen
+            if (strcmp($felder[0], $_POST['username'])){    // Wenn gesuchte Zeile
+                $felder[0] = $_POST['username'];
+                $felder[1] = md5($_POST['password']);// 2. Feld ändern
+                $felder[2] = $_POST['forename'];
+                $felder[3] = $_POST['name'];
+                $zeile = implode('-', $felder);    // Zeile wieder zusammensetzen
+            }
+            fwrite($fp, PHP_EOL.$zeile);                // Zeile schreiben
+        }
+        fclose($fp);
+
+        unset($_POST['password']);
+        unset($_POST['oldpassword']);
+        unset($_POST['repeatpassword']);
+        unset($_POST['forename']);
+        unset($_POST['username']);
+        unset($_POST['name']);
+    }*/
+
+
 }
 
 if(isset($_POST['del'])){
@@ -60,7 +114,7 @@ if(isset($_POST['del'])){
     <?php showheader(); ?>
 </head>
 <body class="page">
-<div class="tabelle">
+
     <form method='post' action='user.php'>
     <table>
 
@@ -103,8 +157,8 @@ if(isset($_POST['del'])){
 
 
         echo "</table>
-                <input type='image' src='../icons/add.png' />
-                <input type='image' src='../icons/del_user.png' name='del' value='Delete'>
+                <input type='image' src='../icons/add.png' name='add' value='Add'/>
+                <input type='image' src='../icons/del_user.png' name='del' value='Del'>
                 <input type='image' src='../icons/edit.png' name='edit' value='Edit'>
                 </form>";
 
@@ -114,6 +168,6 @@ if(isset($_POST['del'])){
         ?>
 
 
-</div>
+
 </body>
 </html>
