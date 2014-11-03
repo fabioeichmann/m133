@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "functions.php";
+include "header.php";
 if(!isset($_SESSION['username']))
 {
     echo "<p style='padding-left: 45%'>Bitte zuerst <a href='login.php'>einloggen</a> ";
@@ -9,24 +10,24 @@ if(!isset($_SESSION['username']))
 }
 if(isset($_POST['logout'])) {
     if ($_POST['logout'] == "logout") {
-        header("login.php");
+        header("Location: login.php");
     }
 }
 
 $id = get_ID();
-//unset($string);
+
 ?>
 
 
 
 <!doctype html>
 <html>
-<body >
+<head>
+    <?php showheader(); ?>
+</head>
+<link rel="stylesheet" media="screen" href="../css/index.css">
+<body class="page">
 
-
-<form method="post" action="login.php" style="padding-left: 90%">
-    <input type="submit" value="Logout" name="logout">
-</form>
 
 
 
@@ -77,20 +78,19 @@ $id = get_ID();
         </tr>
 
     </table>
-    <input type="submit" name="addtask" value="Add">
-    <?php header("main.php");?>
+    <input type="image" src="../icons/save_task.png" name="addtask" value="Add">
+
 </form>
 
-
 <?php
-
+if(isset($_POST['addtask'])) {
     $fp = fopen("data.txt", "a");
-    $string = PHP_EOL . $id . ":";
+    $string = "";
     if (isset($_SESSION['username'])) {
         $string = $string . $_SESSION['username'] . ":";
 
     } else {
-        $string = $string . ":";
+        $string = $string . "default:";
     }
     if (isset($_POST['date'])) {
         $string = $string . $_POST['date'] . ":";
@@ -115,9 +115,10 @@ $id = get_ID();
     } else {
         $string = $string . ":";
     }
-
+    $string = PHP_EOL . $id . ":" . $string;
     fwrite($fp, $string);
     fclose($fp);
-
+    header("Location: main.php");
+}
 ?>
 

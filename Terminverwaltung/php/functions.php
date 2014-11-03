@@ -10,14 +10,42 @@ function finished()
         if($counter != 1 and $_SESSION['username'] == $arr_aufgabe[1] ) {
 
             if ($_POST['checked'. trim($arr_aufgabe[0])] == '1') {
-                unset($aufgabe);
-                fwrite($fp,"");
+                $aufgabe = NULL;
+                fwrite($fp,$aufgabe);
             }else{
                 fwrite($fp,$aufgabe);
             }
 
         }else{
             fwrite($fp,$aufgabe);
+        }
+
+
+        $counter = $counter + 1;
+    }
+    fclose($fp);
+
+}
+
+function del_user()
+{
+    $data = file("logindata.txt");
+    $fp = fopen("logindata.txt", "w");
+    $counter = 1;
+
+    foreach ($data as $user) {
+        $arr_user = explode(":", $user);
+        if($counter != 1) {
+
+            if ($_POST[trim($arr_user[0])] == '1') {
+                $user = NULL;
+                fwrite($fp,$user);
+            }else{
+                fwrite($fp,$user);
+            }
+
+        }else{
+            fwrite($fp,$user);
         }
 
 

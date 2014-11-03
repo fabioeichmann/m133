@@ -29,7 +29,7 @@ if(isset($_POST['username'])) {
         </tr>
         <tr>
             <td>&nbsp;</td>
-            <td><input type="submit" value="anmelden" />
+            <td><input type="submit" class='btn' value="anmelden" />
         </tr>
 
     </table>
@@ -52,7 +52,7 @@ if(isset($_POST['username'])) {
                 $zeichen = explode(":", $login);
                 if ($login_korrekt == 0) {
                     if ($_POST['username'] == $zeichen[0]) {
-                        if (trim($_POST['password']) == trim($zeichen[1])) {
+                        if (trim(md5($_POST['password'])) == trim($zeichen[1])) {
                             $login_korrekt = 1;
 
                             header("Location: main.php");

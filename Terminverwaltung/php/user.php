@@ -1,5 +1,7 @@
 <?php
 session_start();
+include "header.php";
+include "functions.php";
 if(!isset($_SESSION['username']))
 {
     echo "<p style='padding-left: 45%'>Bitte zuerst <a href='login.php'>einloggen</a> ";
@@ -7,75 +9,111 @@ if(!isset($_SESSION['username']))
 
 }
 
-if($_SESSION['username'] != "admin"){
-    echo "<p style='padding-left: 45%'>Bitte zuerst als Admin <a href='login.php'>einloggen</a> ";
-    exit;
-}
+
 if(isset($_POST['logout'])) {
     if ($_POST['logout'] == "logout") {
         header("login.php");
     }
 }
+
+    if (isset($_POST['edit'])) {
+        $userdata = file("logindata.txt");
+        foreach($userdata as $datauser){
+            $arr_userdata = explode(":",$datauser);
+            if($_POST[$arr_userdata[1]] == 1){
+                $arr[] =
+            }
+        }
+        header("Location: edit_user.php?var=".$_POST['admin']);
+
+    }elseif(isset($_POST['add'])){
+        header("Location: add_user.php");
+    }
+
+
 if(isset($_POST['password']) and isset($_POST['repeatpassword'])){
-    if($_POST['password'] != $_POST['repeatpassword']){
-        echo "WRONG";
+    if(trim($_POST['password']) != trim($_POST['repeatpassword'])){
+        echo "<meta http-equiv='refresh' content='1; URL=add_user.php'>";
+            exit;
     }elseif(isset($_POST['adduser'])){
-        $fp = fopen("logindata.txt", a);
-        fwrite($fp,$_POST['username'].":".$_POST['password']);
+
+        $fp = fopen("logindata.txt", "a+");
+        fwrite($fp,PHP_EOL.$_POST['username'].":".md5($_POST['password']).":".$_POST['forename'].":".$_POST['name']);
         fclose($fp);
+        unset($_POST['password']);
+        unset($_POST['forename']);
+        unset($_POST['username']);
+        unset($_POST['name']);
     }
 }
 
-$un = $_POST['username'];
+if(isset($_POST['del'])){
+    del_user();
+}
 ?>
 
 <!doctype html>
 <html>
-    <body >
 
+<link rel="stylesheet" media="screen" href="../css/index.css">
+<head>
+    <?php showheader(); ?>
+</head>
+<body class="page">
+<div class="tabelle">
+    <form method='post' action='user.php'>
+    <table>
 
-    <form method="post" action="login.php" style="padding-left: 90%">
-        <input type="submit" value="Logout" name="logout">
-    </form>
+        <?php
+        $fp = fopen("logindata.txt","a+");
+        $data = file("logindata.txt");
+        $counter = 1;
+        foreach ($data as $user) {
+            $arr_user = explode(":", $user);
+            if($counter == 1) {
+                echo  "<thead>
+                                    <tr>
+                                        <th>".$arr_user[0]."</th>
+                                        <th>".$arr_user[2]."</th>
+                                        <th>".$arr_user[3]."</th>
+                                        <th><input type='image' src='../icons/mark_user.png'/></th>
+                                    </tr>
+                                </thead>";
+            }else {
 
-    <form action="<?php echo $PHP_SELF; ?>" method="post">
-        <table border="0" cellspacing="1" cellpadding="5">
-            <tr>
-                <td>
-                    Username:
-                </td>
-                <td >
-                    <input type="text" size="45" maxlength="50" name="username" value="<?php echo $un?>" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Password:
-                </td>
-                <td>
-                    <input type="password" size="45" maxlength="50" name="password" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Repeat Password:
-                </td>
-                <td>
-                    <input type="password" size="45" maxlength="50" name="repeatpassword" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Add" name="adduser" />
-                </td>
-            </tr>
+                    echo "<tbody>
+                                    <tr>
+                                        <td class='tablecell'>" . $arr_user[0] . "</td>
+                                        <td class='tablecell'>" . $arr_user[2] . "</td>
+                                        <td class='tablecell'>" . $arr_user[3] . "</td>
 
+                                        <td class='tablecell'><input type='hidden' name='".$arr_user[0]."' value='0'><input type='checkbox' name='".$arr_user[0]."' value='1' ></td>
 
+                                    </tr>
+                                  </tbody>";
 
 
 
-        </table>
-    </form>
+            }
+            $counter = $counter + 1;
 
-    </body>
+
+
+        }
+
+
+        echo "</table>
+                <input type='image' src='../icons/add.png' />
+                <input type='image' src='../icons/del_user.png' name='del' value='Delete'>
+                <input type='image' src='../icons/edit.png' name='edit' value='Edit'>
+                </form>";
+
+
+
+
+        ?>
+
+
+</div>
+</body>
 </html>
